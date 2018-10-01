@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Transcribe</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navcontainer">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand active">Home</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Nav1</a></li>
+                    <li><a href="#">Nav2</a></li>
+                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if session['logged_in'] %}
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome, {{ username }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/logout">Log out</a></li>
+                    </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flashes">
+        {% for message in messages %}
+
+          <div class="alert alert-info alert-dismissible fade in">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p class="flash">{{ message }}</p>
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+    <div class="push"></div>
+    </div>
+
+    <footer class="footer">
+      <p style="margin-bottom: 0px;">Posted by: Ritaotao</p>
+      <p>Github: <a href="https://github.com/Ritaotao">https://github.com/Ritaotao</a>.</p>
+    </footer>
+
+</body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</html>

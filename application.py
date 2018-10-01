@@ -1,0 +1,1 @@
+from transcribeapp import application

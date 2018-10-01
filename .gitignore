@@ -1,0 +1,8 @@
+venv/
+env.json
+__pycache__/
+transcribeapp/__pycache__/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
