@@ -158,9 +158,13 @@
 })( jQuery, window, document );
 
 $(document).ready( function () {
-    $('#table_jobs').DataTable({
+    var table = $('#table_jobs').DataTable({
 		"order": [[ 0, "desc" ]],
 		"pageLength": 5,
 		"lengthMenu": [3, 5, 7],
 	});
+
+	setInterval( function () {
+		table.ajax.reload();
+	}, 300000);
 } );

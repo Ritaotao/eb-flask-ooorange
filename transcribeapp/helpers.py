@@ -50,6 +50,22 @@ def upload_file_to_s3(file, bucket_name=AWSConfig.S3_BUCKET, acl="public-read"):
     return "{}{}".format(bucket_location, file.filename)
 
 
+def get_word_list_from_s3(s3key):
+    try:
+        bucket, key = s3key.split('/', 1)
+        json_object = s3.get_object(Bucket=bucket, Key=key)
+        jsonBody = json_object['Body'].read()
+        jsonDict = json.loads(jsonBody)
+        items = jsonDict['results']['items']
+        if isinstance(items, str):
+            return eval(items)
+        else:
+            return items
+    except Exception as e:
+        print("Error: ", e)
+        return ['S3 Object not found or parse error.']
+    
+
 # dynamodb
 class DecimalEncoder(json.JSONEncoder):
     # Helper class to convert a DynamoDB item to JSON.
@@ -63,8 +79,8 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 def scan_transcribe_table():
-    pe = "JobId, CreatedAt, #st, FileName, FileFormat, #im, Transcript"
-    ean = {"#st": "Status", "#im": "Items"}
+    pe = "JobId, CreatedAt, CompletedAt, #st, FileName, FileFormat, S3Key"
+    ean = {"#st": "Status"}
 
     results = []
     response = job_table.scan(ProjectionExpression=pe,

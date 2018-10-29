@@ -43,6 +43,8 @@
                                     {% else %}
                                         {{ job[key] }}
                                     {% endif %}
+                                {% else %}
+                                    None
                                 {% endif %}</td>
                         {% endfor %}
                     </tr>
@@ -67,7 +69,7 @@
                 {% elif word['type'] == 'punctuation' %}
                     {{ word['alternatives'][0]['content'] }}
                 {% else %}
-                    error
+                    {{ word }}
                 {% endif %}
             {% endfor %}
         {% endif %}

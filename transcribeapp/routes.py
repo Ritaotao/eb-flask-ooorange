@@ -1,7 +1,7 @@
 from transcribeapp import application
 from flask import render_template, request, redirect, flash, session, abort
 from werkzeug.utils import secure_filename
-from .helpers import (allowed_file, upload_file_to_s3,
+from .helpers import (allowed_file, upload_file_to_s3, get_word_list_from_s3,
                       scan_transcribe_table, check_user)
 
 
@@ -15,17 +15,16 @@ def home(id=None):
 
         if not job_list:
             flash("No transcription job found.")
-            return redirect("/")
-        else:
-            key_list = ["CreatedAt", "JobId", "Status", "FileName", "FileFormat"]
+        key_list = ["JobId", "CreatedAt", "CompletedAt", "Status", "FileName", "FileFormat"]
         word_list = []
         if id:
             for job in job_list:
-                if job["JobId"] == id and "Transcript" in job.keys():
-                    if isinstance(job["Items"], str):
-                        word_list = eval(job["Items"])
+                if job["JobId"] == id:
+                    if "S3Key" in job.keys():
+                        word_list = get_word_list_from_s3(job['S3Key'])
                     else:
-                        word_list = job["Items"]
+                        word_list = ['Transcript file not exist.']
+                
         return render_template("index.html", job_list=job_list,
                                key_list=key_list, word_list=word_list,
                                username=session.get('username'))
